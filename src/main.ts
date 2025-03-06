@@ -17,7 +17,7 @@ app.get('/v1/models', (_req, res) => {
     res.send({
         data: [
             {
-                id: 'claude-3',
+                id: 'claude-3-5-sonnet-1022',
                 object: 'model',
                 created: 0,
                 owned_by: '-',

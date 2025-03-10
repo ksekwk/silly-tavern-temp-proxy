@@ -1,2 +1,3 @@
-call npm install
-npm start
+npm install
+npm run build
+npm startnpm run windows-start

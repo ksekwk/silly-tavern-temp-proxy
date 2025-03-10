@@ -4,6 +4,7 @@ import { DetectionAvoidance } from './detection-avoidance';
 import { WebSocketSimulator } from './websocket-simulator';
 import { ProcessSimulator } from './process-simulator';
 import { FileSystemSimulator } from './filesystem-simulator';
+import { Environment } from './environment';
 
 /**
  * 初始化环境以模拟 VS Code
@@ -11,6 +12,14 @@ import { FileSystemSimulator } from './filesystem-simulator';
 export async function initializeEnvironment() {
   try {
     console.log('初始化 VS Code 模拟环境...');
+    
+    // 首先加载环境变量
+    Environment.getInstance();
+    
+    // 然后模拟进程信息（依赖环境变量）
+    const processSimulator = ProcessSimulator.getInstance();
+    processSimulator.simulateVSCodeProcess();
+    processSimulator.setupProcessDetectionEvasion();
     
     // 应用 VS Code 环境模拟
     const vsCodeSimulator = VSCodeSimulator.getInstance();
@@ -23,20 +32,19 @@ export async function initializeEnvironment() {
     // 应用所有检测规避技术
     DetectionAvoidance.applyAll();
     
-    // 启动 WebSocket 模拟服务器
-    const wsSimulator = WebSocketSimulator.getInstance();
-    await wsSimulator.startMockServer();
-    wsSimulator.patchWebSocket();
-    
-    // 模拟进程信息
-    const processSimulator = ProcessSimulator.getInstance();
-    processSimulator.simulateVSCodeProcess();
-    processSimulator.setupProcessDetectionEvasion();
-    
-    // 模拟文件系统
+    // 模拟文件系统（依赖环境变量）
     const fsSimulator = FileSystemSimulator.getInstance();
     fsSimulator.createVSCodeDirectoryStructure();
     fsSimulator.patchFileSystemOperations();
+    
+    // 最后启动 WebSocket 模拟服务器（可能依赖前面的设置）
+    const wsSimulator = WebSocketSimulator.getInstance();
+    try {
+      await wsSimulator.startMockServer();
+      wsSimulator.patchWebSocket();
+    } catch (wsError) {
+      console.warn('WebSocket模拟服务器启动失败，继续执行:', wsError);
+    }
     
     // 模拟扩展主机进程
     mockExtensionHost();
@@ -49,6 +57,7 @@ export async function initializeEnvironment() {
   }
 }
 
+// mockExtensionHost 函数不变.
 /**
  * 模拟 VS Code 扩展主机进程
  */

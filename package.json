@@ -8,19 +8,22 @@
     "start": "node -r ./dist/startup.js dist/main.js",
     "start-original": "tsc && node dist/main.js",
     "dev": "ts-node -r ./src/startup.ts src/main.ts",
-    "windows-start": "scripts\\setup-env.bat"
+    "windows-start": "scripts\\setup-env.bat",
+    "prepare-env": "node scripts/setup-vscode-env.js"
   },
   "dependencies": {
     "axios": "^1.6.8",
     "crypto-js": "^4.2.0",
     "express": "^4.18.3",
-    "hjson": "^3.2.2"
+    "hjson": "^3.2.2",
+    "ws": "^8.14.2"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
     "@types/express": "^4.17.21",
     "@types/hjson": "^2.4.6",
     "@types/node": "^20.11.28",
+    "@types/ws": "^8.5.10",
     "typescript": "^5.4.2",
     "ts-node": "^10.9.1"
   },
